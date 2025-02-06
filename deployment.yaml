@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-node-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: sample-node-app
+  template:
+    metadata:
+      labels:
+        app: sample-node-app
+    spec:
+      containers:
+      - name: sample-node-app
+        image: myacrregistry.azurecr.io/aks-sample-node-app:1.0.0
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-node-app-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 3000
+  selector:
+    app: sample-node-app
